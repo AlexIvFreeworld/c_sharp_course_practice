@@ -1,0 +1,74 @@
+using System;
+using System.IO;
+using System.Text;
+using System.Collections.Generic;
+namespace Test_Log {
+public class Loger {
+public Loger(){
+string path = "ini.txt";
+string str;
+using (FileStream fs = new FileStream(path, FileMode.Open)){
+      using (StreamReader sr = new StreamReader(fs, Encoding.Unicode)) {
+Console.WriteLine($"Coding of stream file ini : {sr.CurrentEncoding}");
+Console.WriteLine($"Is end of stream file ini : {sr.EndOfStream}");
+str = sr.ReadToEnd();
+Console.WriteLine($"Length of string  from file ini : {str.Length}");
+Console.WriteLine($"Is end of stream file ini : {sr.EndOfStream}");
+      }
+}
+Console.WriteLine($"This string from file ini : {str}");
+for(int i = 0; i < str.Length - 1; i++){
+if(Int32.Parse(str[i].ToString()) < 0 || Int32.Parse(str[i].ToString()) > 3){
+str = "01234";
+break;
+}
+}
+char[] arrCh = str.ToCharArray();	
+i_Date = Int32.Parse(str[0].ToString());
+i_TypeMessage = Int32.Parse(str[1].ToString());
+i_UserName = Int32.Parse(str[2].ToString());
+i_Message = Int32.Parse(str[3].ToString());
+Console.WriteLine($"Indexes : {i_Date} | {i_TypeMessage} | {i_UserName} | {i_Message}");
+Amount = Int32.Parse(str[4].ToString());
+arrStr = new string[4];
+Console.WriteLine($"This arrStr.Length : {arrStr.Length}");
+arrStr[i_Date] = Date.ToString();
+arrStr[i_TypeMessage] = TypeMessage;
+arrStr[i_UserName] = UserName;
+//arrStr[i_Message] = Message;
+}	
+public DateTime Date{
+	get{return Date;}
+       	set{arrStr[i_Date] = value.ToString();}
+}
+public string TypeMessage{
+	get{return TypeMessage;}
+       	set{arrStr[i_TypeMessage] = value;}
+}
+public string UserName{
+	get{return UserName;}
+       	set{arrStr[i_UserName] = value;}
+}
+public string Message{
+	get{return Message;}
+       	set{arrStr[i_Message] = value;}
+}
+public string[] arrStr;
+public int Amount;
+public int i_Date;
+public int i_TypeMessage;
+public int i_UserName;
+public int i_Message;
+public void WriteToFile(){
+string path = "log.txt";
+using (FileStream fs = new FileStream(path, FileMode.Create)){
+      using (StreamWriter sw = new StreamWriter(fs, Encoding.Unicode)) {
+	      for(int i = 0; i < Amount; i++){
+	      sw.Write($"{arrStr[i]} | ");
+	      }
+	      sw.WriteLine();
+      }
+}
+}
+}
+}
