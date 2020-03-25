@@ -56,6 +56,12 @@ namespace DZ_Day_6
         {
             Name = name;
             arrCard = new Queue<Card>();
+	    Loger LG = new Loger();
+	    LG.Date = DateTime.Now;
+	    LG.TypeMessage = "info";
+	    LG.UserName = "program";
+	    LG.Message = "constructor Player was called";
+	    LG.WriteToFile();
         }
         public void Show()
         {
@@ -65,6 +71,12 @@ namespace DZ_Day_6
                 WriteLine($"{obj}");
             }
             WriteLine("--------------------------------------");
+	    Loger LG = new Loger();
+	    LG.Date = DateTime.Now;
+	    LG.TypeMessage = "info";
+	    LG.UserName = "program";
+	    LG.Message = "method Show was called";
+	    LG.WriteToFile();
         }
 
     }
@@ -99,6 +111,12 @@ namespace DZ_Day_6
                 {
                     Card C = new Card(type, j);
                     arrCard.Add(C);
+	    Loger LG = new Loger();
+	    LG.Date = DateTime.Now;
+	    LG.TypeMessage = "info";
+	    LG.UserName = "program";
+	    LG.Message = "New card was added";
+	    LG.WriteToFile();
                 }
             }
         }
@@ -135,13 +153,13 @@ namespace DZ_Day_6
             G.Show();
             Player Alex = new Player("Alex");
 	    //testing Loger
-	    LG.Date.ToLocalTime();
+	    LG.Date = DateTime.Now;
 	    LG.TypeMessage = "info";
-	    LG.UserName = "Alex";
+	    LG.UserName = "program";
 	    LG.Message = "Creating Player Alex";
 	    LG.WriteToFile();
-	    WriteLine($"LG.TypeMessage : {LG.TypeMessage}");
-	    WriteLine($"LG.arrStr[1] : {LG.arrStr[1]}");
+	    //WriteLine($"LG.TypeMessage : {LG.TypeMessage}");
+	    //WriteLine($"LG.arrStr[1] : {LG.arrStr[1]}");
             Player Igor = new Player("Igor");
             for (int i = 0; i < 36; i++)
             {
