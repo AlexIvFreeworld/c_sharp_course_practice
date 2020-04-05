@@ -8,13 +8,13 @@ class User{
 public string Name {get; set;}
 public string Login {get; set;}
 public string Password {get; set;}
-public DateTime DateBirth {get; set;}
+public string DateBirth {get; set;}
 public int CurrentResult {get; set;}
 public int CurrentRating {get; set;}
 public List<string> arrResults;
 public User(string name){
 Name = name;
-DateBirth = DateTime.Now;
+DateBirth = "00.00.0000";
 arrResults = new List<string>();
 }
 public void Show(){
@@ -81,6 +81,7 @@ public List<KnowledgeSpace> arrSpaces;
 public List<Question> arrCurrentQuestion;
 public List<User> arrUsers;
 public User CurrentUser = null;
+public List<string> arrHistoryQuiz;
 public Quiz(){
 arrSpaces = new List<KnowledgeSpace>();
 arrCurrentQuestion = new List<Question>();
@@ -91,6 +92,7 @@ arrDel.Add(ShowResult);
 arrDel.Add(ShowTop20);
 arrDel.Add(ChangeSetting);
 arrDel.Add(Exit);
+arrHistoryQuiz = new List<string>();
 }
 public bool AddorRegUser(){
 string temp_log,temp_pass, temp_name, temp_birthday;
@@ -126,7 +128,7 @@ WriteLine("Enter your password");
 temp_pass = ReadLine();
 User U = new User(temp_name);
 U.Login = temp_log;
-U.DateBirth = DateTime.Now;//need to correct
+U.DateBirth = temp_birthday;
 U.Password = temp_pass;
 arrUsers.Add(U);
 foreach(User obj in arrUsers){
@@ -152,18 +154,13 @@ else{
 WriteLine("Error enter");
 Menu();
 }
-/*	arrDel[0]();
-	arrDel[1]();
-	arrDel[2]();
-	arrDel[3]();
-*/
 }
 public void Exit(){
 WriteLine("Good buy!!!");
 }
 public void ChoiceSpace(){
-WriteLine("This is ChoiceSpace()");
-WriteLine("Choice knowledge space :");
+//WriteLine("This is ChoiceSpace()");
+Write("Choice knowledge space : ");
 WriteLine("Geography (1), History (2), Mix (3)");
 arrCurrentQuestion.Clear();
 string choice = ReadLine();
@@ -204,20 +201,19 @@ else{
 WriteLine("Incorrectly!");
 }
 }
-CurrentUser.arrResults.Add($"Result quiz by {DateTime.Now} : {CurrentUser.CurrentResult}, Raiting : {CurrentUser.CurrentRating}"); 
-// 
-//
-//
-//
-//
+SortUsers();
+CurrentUser.arrResults.Add($"Result quiz by {DateTime.Now} : {CurrentUser.CurrentResult}, Rating : {CurrentUser.CurrentRating}"); 
+arrHistoryQuiz.Add($"Result  {CurrentUser.Name} : {CurrentUser.CurrentResult}, Rating : {CurrentUser.CurrentRating}"); 
 // end quiz
+WriteLine("The quiz finished");
+CurrentUser.Show();
 Menu();
 }
 public void StartQuiz(){
 
 }
 public void ShowResult(){// need show history results
-WriteLine("This is ShowResult()");
+//WriteLine("This is ShowResult()");
 	if(CurrentUser != null){
 foreach(string str in CurrentUser.arrResults){
 WriteLine(str);
@@ -228,12 +224,60 @@ WriteLine("Current user isn't exist");
 	}
 	Menu();
 }
+public void SortHistory(){
+string[] arrTemp1 = new string[4];
+string[] arrTemp2 = new string[4];
+string[] arrDiff = {" : ", ", "};
+string Temp;
+for(int i = 0; i < arrHistoryQuiz.Count-1; i++){
+    for(int j = 0; j < arrHistoryQuiz.Count-1-i; j++){
+       arrTemp1 = arrHistoryQuiz[j].Split(arrDiff, StringSplitOptions.RemoveEmptyEntries);
+       arrTemp2 = arrHistoryQuiz[j+1].Split(arrDiff, StringSplitOptions.RemoveEmptyEntries);
+       if(Int32.Parse(arrTemp1[1]) < Int32.Parse(arrTemp2[1])){
+       Temp = arrHistoryQuiz[j];
+	arrHistoryQuiz[j] = arrHistoryQuiz[j+1];
+	arrHistoryQuiz[j+1] = Temp;
+	       } 
+     /*  foreach(string str in arrTemp1){
+       WriteLine(str);
+       } */
+    }
+}
+}
+public void SortUsers(){
+User Temp;
+int TempCount = 1;
+for(int i = 0; i < arrUsers.Count-1; i++){
+    for(int j = 0; j < arrUsers.Count-1-i; j++){
+       if(arrUsers[j].CurrentResult < arrUsers[j+1].CurrentResult){
+       Temp = arrUsers[j];
+	arrUsers[j] = arrUsers[j+1];
+	arrUsers[j+1] = Temp;
+	       } 
+    }
+}
+      foreach(User u in arrUsers){
+//       WriteLine($"User name : {u.Name}, result : {u.CurrentResult}");
+       u.CurrentRating = TempCount++; 
+       } 
+}
 public void ShowTop20(){
-WriteLine("This is ShowResult()");
+SortHistory();
+//WriteLine("This is ShowTop20");
+foreach(string str in arrHistoryQuiz){
+WriteLine(str);
+}
 	Menu();
 }
 public void ChangeSetting(){
-WriteLine("This is ChangeSetting()");
+//WriteLine("This is ChangeSetting()");
+if(CurrentUser != null){
+WriteLine("Enter your new password");
+CurrentUser.Password = ReadLine();
+WriteLine("Enter your birthday");
+CurrentUser.DateBirth = ReadLine();
+
+}
 	Menu();
 }
 public void AddKnowledgeSpace(KnowledgeSpace K){
@@ -290,26 +334,39 @@ QZ.AddKnowledgeSpace(K_2);
 QZ.arrUsers.Add(new User("Alex") {
 	Login = "123",
 	Password = "123",
+	CurrentResult = 0
 		}); 
-WriteLine("Checking user before registration");
+QZ.arrUsers.Add(new User("Petr") {
+	Login = "456",
+	Password = "456",
+	CurrentResult = 1
+		}); 
+QZ.arrUsers.Add(new User("Igor") {
+	Login = "654",
+	Password = "654",
+	CurrentResult = 2
+		}); 
+QZ.arrUsers.Add(new User("Fedor") {
+	Login = "321",
+	Password = "321",
+	CurrentResult = 3
+		}); 
+/*WriteLine("Checking user before registration");
 foreach(User U in QZ.arrUsers){
 U.Show();
-}	
+}
+*/
 bool is_reg = QZ.AddorRegUser();
 if(!is_reg) {
 QZ.Exit();
 return;
 }
-WriteLine("Checking user after registration");
+/*WriteLine("Checking user after registration");
 foreach(User U in QZ.arrUsers){
 U.Show();
-}	
-QZ.Menu();
-//WriteLine("Result this quiz");
-//QZ.ShowResult();
-/*WriteLine("This menu");
-QZ.Menu();
+}
 */
+QZ.Menu();
 }
 }
 }
